@@ -7,15 +7,15 @@ export const validationMixin = {
           invalidInput: this.localization.open.invalidInput,
           greaterThanNext: this.localization.open.greaterThanNext,
           lessThanPrevious: this.localization.open.lessThanPrevious,
-          midnightNotLast: this.localization.open.midnightNotLast
+          midnightNotLast: this.localization.open.midnightNotLast,
         },
         close: {
           invalidInput: this.localization.close.invalidInput,
           lessThanPrevious: this.localization.close.lessThanPrevious,
           greaterThanNext: this.localization.close.greaterThanNext,
-          midnightNotLast: this.localization.close.midnightNotLast
-        }
-      }
+          midnightNotLast: this.localization.close.midnightNotLast,
+        },
+      },
     };
   },
   created() {
@@ -23,22 +23,22 @@ export const validationMixin = {
   },
   computed: {},
   methods: {
-    defaultValidation: function() {
+    defaultValidation: function () {
       return {
         invalidInput: false,
         greaterThanNext: false,
         lessThanPrevious: false,
-        midnightNotLast: false
+        midnightNotLast: false,
       };
     },
-    defaultValidations: function() {
+    defaultValidations: function () {
       return {
         anyErrors: false,
         open: this.defaultValidation(),
-        close: this.defaultValidation()
+        close: this.defaultValidation(),
       };
     },
-    isValidInput: function(input) {
+    isValidInput: function (input) {
       return (
         this.isValidBackendTime(input) ||
         input === '2400' ||
@@ -46,7 +46,7 @@ export const validationMixin = {
         input === ''
       );
     },
-    resetValidations: function() {
+    resetValidations: function () {
       let validations = [];
 
       this.hours.forEach((hour, index) => {
@@ -55,7 +55,7 @@ export const validationMixin = {
 
       this.validations = validations;
     },
-    runValidations: function() {
+    runValidations: function () {
       let inputNum = 1;
 
       this.resetValidations();
@@ -69,7 +69,7 @@ export const validationMixin = {
 
       this.updateAnyErrors();
     },
-    runValidation: function(value, index, inputNum, whichTime) {
+    runValidation: function (value, index, inputNum, whichTime) {
       if (this.isValidBackendTime(value)) {
         this.validations[index][whichTime] = this.runInputValidation(
           value,
@@ -87,7 +87,7 @@ export const validationMixin = {
 
       this.updateAdjacentValidations(index, whichTime, inputNum);
     },
-    runInputValidation: function(value, index, inputNum, totalInputs) {
+    runInputValidation: function (value, index, inputNum, totalInputs) {
       const prevTime = this.getPrevious(this.hours, index, inputNum);
       const nextTime = this.getNext(this.hours, index, inputNum, totalInputs);
       let validations = this.defaultValidation();
@@ -112,7 +112,7 @@ export const validationMixin = {
 
       return validations;
     },
-    updateAdjacentValidations: function(index, whichTime, inputNum) {
+    updateAdjacentValidations: function (index, whichTime, inputNum) {
       const prevIndex = index - 1;
       const nextIndex = index + 1;
       const currentValidations = this.validations[index][whichTime];
@@ -155,37 +155,37 @@ export const validationMixin = {
         this.validations[index].close = nextValidations;
       }
     },
-    updateAnyErrors: function() {
+    updateAnyErrors: function () {
       this.validations.forEach(
         (validation, index) =>
           (this.validations[index].anyErrors = this.anyErrors(validation))
       );
     },
-    anyErrors: function(validation) {
+    anyErrors: function (validation) {
       return this.anyError(validation.open) || this.anyError(validation.close)
         ? true
         : false;
     },
-    anyError: function(validation) {
-      return Object.keys(validation).some(key => {
+    anyError: function (validation) {
+      return Object.keys(validation).some((key) => {
         return validation[key] === true;
       });
     },
-    activeErrors: function(index) {
+    activeErrors: function (index) {
       const validations = this.validations[index];
       let errors = [];
 
-      Object.keys(validations).forEach(key => {
+      Object.keys(validations).forEach((key) => {
         if (typeof validations[key] === 'object') {
           let validation = validations[key];
           Object.keys(validation)
-            .filter(key => {
+            .filter((key) => {
               return validation[key] === true;
             })
-            .forEach(error => {
+            .forEach((error) => {
               errors.push({
                 whichTime: key,
-                error: error
+                error: error,
               });
             });
         }
@@ -193,8 +193,8 @@ export const validationMixin = {
 
       return errors;
     },
-    errorMessage: function(whichTime, error) {
+    errorMessage: function (whichTime, error) {
       return this.errors[whichTime][error];
-    }
-  }
+    },
+  },
 };

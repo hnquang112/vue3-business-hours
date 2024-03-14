@@ -19,40 +19,42 @@
 
 <script>
 import BusinessHoursDay from './BusinessHoursDay.vue';
+import '../style.css';
+
 export default {
   name: 'BusinessHours',
   components: {
-    BusinessHoursDay
+    BusinessHoursDay,
   },
   props: {
     days: {
       type: Object,
-      required: true
+      required: true,
     },
     name: {
       type: String,
-      default: 'businessHours'
+      default: 'businessHours',
     },
     type: {
       type: String,
       default: 'datalist',
-      validator: function(value) {
+      validator: function (value) {
         return ['datalist', 'select'].indexOf(value) !== -1;
-      }
+      },
     },
     timeIncrement: {
       type: Number,
       default: 30,
-      validator: function(value) {
+      validator: function (value) {
         return [15, 30, 60].indexOf(value) !== -1;
-      }
+      },
     },
     color: {
       type: String,
       default: '#2779bd',
-      validator: function(value) {
+      validator: function (value) {
         return value.charAt(0) === '#' ? true : false;
-      }
+      },
     },
     localization: {
       type: Object,
@@ -70,7 +72,7 @@ export default {
           lessThanPrevious:
             'Please enter an opening time that is after the previous closing time.',
           midnightNotLast:
-            "Midnight can only be selected for the day's last closing time."
+            "Midnight can only be selected for the day's last closing time.",
         },
         close: {
           invalidInput:
@@ -80,7 +82,7 @@ export default {
           lessThanPrevious:
             'Please enter a closing time that is before the next opening time.',
           midnightNotLast:
-            "Midnight can only be selected for the day's last closing time."
+            "Midnight can only be selected for the day's last closing time.",
         },
         t24hours: '24 hours',
         midnight: 'Midnight',
@@ -105,24 +107,24 @@ export default {
           veteransDay: 'Veterans Day',
           thanksgiving: 'Thanksgiving',
           christmasEve: 'Christmas Eve',
-          christmas: 'Christmas'
-        }
-      })
+          christmas: 'Christmas',
+        },
+      }),
     },
     switchWidth: {
       type: Number,
-      default: 90
+      default: 90,
     },
     hourFormat24: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
-    hoursChange: function(val) {
+    hoursChange: function (val) {
       this.$emit('updated-hours', val);
-    }
-  }
+    },
+  },
 };
 </script>
 

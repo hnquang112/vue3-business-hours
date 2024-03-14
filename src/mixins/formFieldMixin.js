@@ -3,67 +3,67 @@ export const formFieldMixin = {
   data() {
     return {
       selected: this.selectedTime,
-      times: []
+      times: [],
     };
   },
   props: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     day: {
       type: String,
-      required: true
+      required: true,
     },
     hours: {
       type: Array,
-      required: true
+      required: true,
     },
     index: {
       type: Number,
-      required: true
+      required: true,
     },
     inputNum: {
       type: Number,
-      required: true
+      required: true,
     },
     totalInputs: {
       type: Number,
-      required: true
+      required: true,
     },
     selectedTime: {
       type: String,
-      required: true
+      required: true,
     },
     timeIncrement: {
       type: Number,
-      required: true
+      required: true,
     },
     localization: {
-      type: Object
+      type: Object,
     },
     hourFormat24: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   created() {
     this.times = this.generateTimes(this.timeIncrement);
   },
   watch: {
-    selectedTime: function() {
+    selectedTime: function () {
       this.selected = this.selectedTime;
-    }
+    },
   },
   computed: {
-    whichTime: function() {
+    whichTime: function () {
       return this.isEven(this.inputNum) ? 'close' : 'open';
     },
-    defaultText: function() {
+    defaultText: function () {
       return this.whichTime === 'open'
         ? this.localization.placeholderOpens
         : this.localization.placeholderCloses;
     },
-    optionName: function() {
+    optionName: function () {
       return (
         this.name +
         '[' +
@@ -75,7 +75,7 @@ export const formFieldMixin = {
         ']'
       );
     },
-    filteredTimes: function() {
+    filteredTimes: function () {
       let prevTime = this.getPrevious(this.hours, this.index, this.inputNum),
         nextTime = this.getNext(
           this.hours,
@@ -100,24 +100,22 @@ export const formFieldMixin = {
 
       return filteredTimes;
     },
-    showMidnightOption: function() {
+    showMidnightOption: function () {
       return (
         this.isLastRow(this.index, this.hours) &&
         this.whichTime === 'close' &&
         this.hours[this.index].close !== '24hrs'
       );
-    }
-  },
-  filters: {
-    formatTime: function(time, hourFormat24) {
-      return moment(time, 'HHmm').format(hourFormat24 ? 'HH:mm' : 'hh:mm A');
-    }
+    },
   },
   methods: {
-    inputEventHandler: function(e) {
+    formatTime: function (time, hourFormat24) {
+      return moment(time, 'HHmm').format(hourFormat24 ? 'HH:mm' : 'hh:mm A');
+    },
+    inputEventHandler: function (e) {
       this.$emit('input-change', e.target.value);
     },
-    generateTimes: function(timeIncrement) {
+    generateTimes: function (timeIncrement) {
       let currentTime = '0000',
         times = [];
 
@@ -130,12 +128,12 @@ export const formFieldMixin = {
 
       return times;
     },
-    getFiltered: function(when, adjacentTime, collection) {
+    getFiltered: function (when, adjacentTime, collection) {
       if (
         this.isLastInput(this.inputNum, this.totalInputs) &&
         this.hours[this.index].open === ''
       ) {
-        collection = collection.filter(value => value > adjacentTime);
+        collection = collection.filter((value) => value > adjacentTime);
         collection.shift();
         return collection;
       }
@@ -145,12 +143,12 @@ export const formFieldMixin = {
       }
 
       if (when === 'before') {
-        collection = collection.filter(value => value < adjacentTime);
+        collection = collection.filter((value) => value < adjacentTime);
       } else if (when === 'after') {
-        collection = collection.filter(value => value > adjacentTime);
+        collection = collection.filter((value) => value > adjacentTime);
       }
 
       return collection;
-    }
-  }
+    },
+  },
 };

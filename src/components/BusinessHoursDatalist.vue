@@ -11,9 +11,9 @@
     />
     <datalist :id="datalistID">
       <option v-if="isFirstRow(index)">{{ localization.t24hours }}</option>
-      <option v-for="time in filteredTimes" :key="time">{{
-        time | formatTime(hourFormat24)
-      }}</option>
+      <option v-for="time in filteredTimes" :key="time">
+        {{ formatTime(time, hourFormat24) }}
+      </option>
       <option v-if="showMidnightOption">{{ localization.midnight }}</option>
     </datalist>
     <input :name="optionName" type="hidden" :value="selected" />
@@ -29,14 +29,14 @@ export default {
   props: {
     anyError: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    formattedTime: function() {
+    formattedTime: function () {
       return this.frontendInputFormat(this.selected);
     },
-    datalistID: function() {
+    datalistID: function () {
       return (
         this.name.replace('_', '-') +
         '-' +
@@ -46,8 +46,8 @@ export default {
         '-' +
         this.whichTime
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

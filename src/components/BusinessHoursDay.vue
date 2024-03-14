@@ -1,29 +1,24 @@
 <template>
   <div is="transition-group" name="fade">
-    <div v-for="({ open, close, id, isOpen }, index) in hours" :key="id">
+    <div
+      v-for="({ open, close, id, isOpen }, index) in hours"
+      :key="id || uniqId"
+    >
       <div class="flex-table row" role="rowgroup">
         <div class="flex-row day" role="cell">
           <div v-if="showDay(index)">{{ localization.days[day] }}</div>
         </div>
-        <div class="flex-row toggle" role="cell">
-          <ToggleButton
+        <div class="flex-row switch" role="cell">
+          <Toggle
+            :id="'toggle-' + id || uniqId"
             v-if="showDay(index)"
+            v-model="anyOpen"
             @change="
               toggleOpen();
               resetHours();
               runValidations();
             "
-            :value="anyOpen"
-            :sync="true"
-            :labels="{
-              checked: localization.switchOpen,
-              unchecked: localization.switchClosed
-            }"
-            :color="color"
-            :width="switchWidth"
-            :height="25"
-            :font-size="12"
-          />
+          ></Toggle>
         </div>
         <transition name="fade">
           <div class="flex-row hours open" role="cell" v-visible="isOpenToday">
@@ -102,7 +97,30 @@
             v-if="showRemoveButton()"
             @click="removeRow(index)"
           >
-            <FontAwesomeIcon icon="times" class="fa-sm" />
+            <svg
+              width="16px"
+              height="16px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#000000"
+              stroke-width="1.2"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z"
+                  fill="#0F0F0F"
+                  data-darkreader-inline-fill=""
+                  style="--darkreader-inline-fill: #0b0c0d"
+                ></path>
+              </g>
+            </svg>
           </button>
         </div>
         <div class="flex-row add" role="cell" v-visible="isOpenToday">
@@ -112,14 +130,41 @@
             class="add-hours"
             v-if="showAddButton(index)"
             @click="addRow()"
-          >{{ localization.addHours }}</button>
+          >
+            <svg
+              width="28px"
+              height="28px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M6 12H18M12 6V18"
+                  stroke="#000000"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+            </svg>
+            <!-- {{ localization.addHours }} -->
+          </button>
         </div>
       </div>
       <ul class="time-errors" v-if="validations[index].anyErrors">
         <li
           v-for="{ whichTime, error } in activeErrors(index)"
           :key="whichTime + '.' + error"
-        >{{ errorMessage(whichTime, error) }}</li>
+        >
+          {{ errorMessage(whichTime, error) }}
+        </li>
       </ul>
     </div>
   </div>
@@ -128,76 +173,81 @@
 <script>
 import BusinessHoursSelect from './BusinessHoursSelect.vue';
 import BusinessHoursDatalist from './BusinessHoursDatalist.vue';
-import { ToggleButton } from 'vue-js-toggle-button';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Toggle from '@vueform/toggle';
+import uniqid from 'uniqid';
 import { helperMixin } from '../mixins/helperMixin';
 import { validationMixin } from '../mixins/validationMixin';
-import uniqid from 'uniqid';
+import '@vueform/toggle/themes/default.css';
+
 export default {
   name: 'BusinessHoursDay',
   components: {
     BusinessHoursSelect,
     BusinessHoursDatalist,
-    ToggleButton,
-    FontAwesomeIcon
+    Toggle,
   },
   mixins: [helperMixin, validationMixin],
   props: {
     day: {
       type: String,
-      required: true
+      required: true,
     },
     hours: {
       type: Array,
-      required: true
+      required: true,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     timeIncrement: {
       type: Number,
-      required: true
+      required: true,
     },
     type: {
       type: String,
-      required: true
+      required: true,
     },
     color: {
       type: String,
-      required: true
+      required: true,
     },
     localization: {
-      type: Object
+      type: Object,
     },
     switchWidth: {
-      type: Number
+      type: Number,
     },
     hourFormat24: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   computed: {
-    totalInputs: function() {
+    totalInputs: function () {
       return this.hours.length * 2;
     },
-    isOpenToday: function() {
+    isOpenToday: function () {
       return this.hours[0].isOpen;
     },
-    anyOpen: function() {
-      return this.hours.some(hour => {
+    anyOpen: function () {
+      return this.hours.some((hour) => {
         return hour.isOpen === true;
       });
-    }
+    },
+    uniqId: function () {
+      return uniqid();
+    },
   },
   directives: {
-    visible: function(el, binding) {
+    visible: function (el, binding) {
       el.style.visibility = binding.value ? 'visible' : 'hidden';
-    }
+    },
   },
   methods: {
-    onChangeEventHandler: function(whichTime, index, value) {
+    onChangeEventHandler: function (whichTime, index, value) {
       value = this.backendInputFormat(value);
+
+      this.hours[0].id = this.hours[0].id || uniqid();
 
       if (value == '24hrs') {
         this.hours.splice(1);
@@ -234,43 +284,43 @@ export default {
       this.runValidations();
       this.updateHours();
     },
-    inputNum: function(whichTime, index) {
+    inputNum: function (whichTime, index) {
       if (whichTime === 'open') {
         return index * 2 + 1;
       } else if (whichTime === 'close') {
         return index * 2 + 2;
       }
     },
-    toggleOpen: function() {
+    toggleOpen: function () {
       this.hours[0].isOpen = this.hours[0].isOpen ? false : true;
     },
-    resetHours: function() {
+    resetHours: function () {
       this.hours.splice(1);
       this.hours[0].open = this.hours[0].close = '';
       this.updateHours();
     },
-    addRow: function() {
+    addRow: function () {
       this.hours.push({
         id: uniqid(),
         open: '',
         close: '',
-        isOpen: true
+        isOpen: true,
       });
       this.runValidations();
       this.updateHours();
     },
-    removeRow: function(index) {
+    removeRow: function (index) {
       this.hours.splice(index, 1);
       this.runValidations();
       this.updateHours();
     },
-    showDay: function(index) {
+    showDay: function (index) {
       return index > 0 ? false : true;
     },
-    showRemoveButton: function() {
+    showRemoveButton: function () {
       return this.hours.length > 1 ? true : false;
     },
-    showAddButton: function(index) {
+    showAddButton: function (index) {
       return this.hours.length === index + 1 &&
         this.hours[index].open !== '' &&
         this.hours[index].close !== '' &&
@@ -296,11 +346,11 @@ export default {
         ? true
         : false;
     },
-    updateHours: function() {
+    updateHours: function () {
       const updatedHours = { [this.day]: this.hours };
       this.$emit('hours-change', updatedHours);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -309,7 +359,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  margin: 0.75em 0;
+  // margin: 0.75em 0;
   height: 45px;
   width: 100%;
 }
@@ -318,8 +368,8 @@ export default {
   width: 20%;
 }
 
-.flex-row /deep/ input,
-.flex-row /deep/ select {
+.flex-row :deep(input),
+.flex-row :deep(select) {
   margin: 1px;
   padding: 3px 5px;
   width: 110px;

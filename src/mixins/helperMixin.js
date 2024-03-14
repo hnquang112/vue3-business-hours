@@ -2,11 +2,11 @@ import moment from 'moment';
 export const helperMixin = {
   props: {
     localization: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
-    titleCase: function(str) {
+    titleCase: function (str) {
       return str
         .split('-')
         .map(function capitalize(part) {
@@ -14,25 +14,25 @@ export const helperMixin = {
         })
         .join(' ');
     },
-    frontendTimeFormat: function(value) {
+    frontendTimeFormat: function (value) {
       return moment(value, 'HHmm').format(
         this.hourFormat24 ? 'HH:mm' : 'hh:mm A'
       );
     },
-    backendTimeFormat: function(value) {
+    backendTimeFormat: function (value) {
       return moment(value, 'hh:mm A').format('HHmm');
     },
-    isValidFrontendTime: function(value) {
+    isValidFrontendTime: function (value) {
       return moment(
         value,
         this.hourFormat24 ? 'HH:mm' : 'hh:mm A',
         true
       ).isValid();
     },
-    isValidBackendTime: function(value) {
+    isValidBackendTime: function (value) {
       return moment(value, 'HHmm', true).isValid();
     },
-    frontendInputFormat: function(value) {
+    frontendInputFormat: function (value) {
       if (value === '24hrs') {
         value = this.localization.t24hours;
       } else if (value === '2400') {
@@ -45,7 +45,7 @@ export const helperMixin = {
 
       return value;
     },
-    backendInputFormat: function(value) {
+    backendInputFormat: function (value) {
       if (
         value === this.localization.midnight ||
         value === this.localization.midnight.toLowerCase()
@@ -61,40 +61,40 @@ export const helperMixin = {
         return value;
       }
     },
-    isEven: function(value) {
+    isEven: function (value) {
       return value % 2 == 0 ? true : false;
     },
-    isFirstInput: function(inputNum) {
+    isFirstInput: function (inputNum) {
       return inputNum === 1;
     },
-    isLastInput: function(inputNum, totalInputs) {
+    isLastInput: function (inputNum, totalInputs) {
       return inputNum === totalInputs;
     },
-    isFirstRow: function(index) {
+    isFirstRow: function (index) {
       return index === 0;
     },
-    isLastRow: function(index, hours) {
+    isLastRow: function (index, hours) {
       return index === hours.length - 1;
     },
-    isMiddleRow: function(index, hours) {
+    isMiddleRow: function (index, hours) {
       return !this.isFirstRow(index) && !this.isLastRow(index, hours);
     },
-    onlyOneRow: function(hours) {
+    onlyOneRow: function (hours) {
       return hours.length === 1;
     },
-    getPrevious: function(type, index, inputNum) {
+    getPrevious: function (type, index, inputNum) {
       if (inputNum === 1) {
         return;
       }
 
       return this.isEven(inputNum) ? type[index].open : type[index - 1].close;
     },
-    getNext: function(type, index, inputNum, totalInputs) {
+    getNext: function (type, index, inputNum, totalInputs) {
       if (inputNum === totalInputs) {
         return;
       }
 
       return this.isEven(inputNum) ? type[index + 1].open : type[index].close;
-    }
-  }
+    },
+  },
 };
