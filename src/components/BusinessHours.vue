@@ -19,7 +19,6 @@
 
 <script>
 import BusinessHoursDay from './BusinessHoursDay.vue';
-import '../style.css';
 
 export default {
   name: 'BusinessHours',
@@ -128,13 +127,14 @@ export default {
 };
 </script>
 
-<style scoped>
-.business-hours-container {
-  display: block;
-  width: 100%;
+<style scoped lang="sass">
+.business-hours-container
+  display: block
+  width: 100%
   /* max-width: 630px; */
-  font-family: -apple-system, Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  color: #3d4852;
-}
+  font-family: -apple-system, Helvetica, Arial, sans-serif
+  font-size: 15px
+  color: #3d4852
 </style>
+
+<style scope src="../style.css"></style>

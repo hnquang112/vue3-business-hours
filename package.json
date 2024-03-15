@@ -1,6 +1,6 @@
 {
   "name": "@hnquang/vue3-business-hours",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Modified Vue3 business hours based on https://github.com/sbarry50/vue-business-hours",
   "author": "Quang Ho <hnquang112@yahoo.com.vn>",
   "module": "dist/index.mjs",
@@ -9,8 +9,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs"
-    },
-    "./dist/style.css": "./dist/style.css"
+    }
   },
   "repository": {
     "type": "git",

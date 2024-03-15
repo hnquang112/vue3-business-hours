@@ -753,7 +753,7 @@ function Ct(t, i, e, o, l, n) {
     }, null, 8, ["onHoursChange", "day", "hours", "name", "time-increment", "type", "color", "localization", "switch-width", "hour-format24"]))), 128))
   ]);
 }
-const Et = /* @__PURE__ */ C(Tt, [["render", Ct], ["__scopeId", "data-v-b4638d86"]]);
+const Et = /* @__PURE__ */ C(Tt, [["render", Ct], ["__scopeId", "data-v-c1580f11"]]);
 export {
   Et as default
 };
