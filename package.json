@@ -1,19 +1,21 @@
 {
   "name": "@hnquang/vue3-business-hours",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Modified Vue3 business hours based on https://github.com/sbarry50/vue-business-hours",
   "author": "Quang Ho <hnquang112@yahoo.com.vn>",
   "module": "dist/index.mjs",
   "main": "dist/index.umd.js",
   "license": "MIT",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/hnquang112/vue3-business-hours"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js"
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "files": [
     "dist"
@@ -34,6 +36,7 @@
     "uniqid": "^5.4.0"
   },
   "peerDependencies": {
+    "sass": "^1.72.0",
     "vue": "^3.4.21"
   },
   "devDependencies": {

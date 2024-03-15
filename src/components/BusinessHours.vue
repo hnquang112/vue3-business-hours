@@ -136,5 +136,3 @@ export default {
   font-size: 15px
   color: #3d4852
 </style>
-
-<style scope src="../style.css"></style>

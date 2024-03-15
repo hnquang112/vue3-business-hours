@@ -15,6 +15,7 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'vue',
+          '@vueform/toggle': '@vueform/toggle',
           uniqid: 'uniqid',
           moment: 'moment',
         },

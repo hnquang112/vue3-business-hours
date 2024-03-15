@@ -9,63 +9,63 @@ const E = {
     }
   },
   methods: {
-    titleCase: function(t) {
-      return t.split("-").map(function(e) {
-        return e.charAt(0).toUpperCase() + e.slice(1);
+    titleCase: function(e) {
+      return e.split("-").map(function(t) {
+        return t.charAt(0).toUpperCase() + t.slice(1);
       }).join(" ");
     },
-    frontendTimeFormat: function(t) {
-      return g(t, "HHmm").format(
+    frontendTimeFormat: function(e) {
+      return g(e, "HHmm").format(
         this.hourFormat24 ? "HH:mm" : "hh:mm A"
       );
     },
-    backendTimeFormat: function(t) {
-      return g(t, "hh:mm A").format("HHmm");
+    backendTimeFormat: function(e) {
+      return g(e, "hh:mm A").format("HHmm");
     },
-    isValidFrontendTime: function(t) {
+    isValidFrontendTime: function(e) {
       return g(
-        t,
+        e,
         this.hourFormat24 ? "HH:mm" : "hh:mm A",
         !0
       ).isValid();
     },
-    isValidBackendTime: function(t) {
-      return g(t, "HHmm", !0).isValid();
+    isValidBackendTime: function(e) {
+      return g(e, "HHmm", !0).isValid();
     },
-    frontendInputFormat: function(t) {
-      return t === "24hrs" ? t = this.localization.t24hours : t === "2400" ? t = this.localization.midnight : this.isValidBackendTime(t) ? t = this.frontendTimeFormat(t) : t === "" && (t = ""), t;
+    frontendInputFormat: function(e) {
+      return e === "24hrs" ? e = this.localization.t24hours : e === "2400" ? e = this.localization.midnight : this.isValidBackendTime(e) ? e = this.frontendTimeFormat(e) : e === "" && (e = ""), e;
     },
-    backendInputFormat: function(t) {
-      return t === this.localization.midnight || t === this.localization.midnight.toLowerCase() ? "2400" : t.toLowerCase() === this.localization.t24hours.toLowerCase() ? "24hrs" : this.isValidFrontendTime(t) ? this.backendTimeFormat(t) : t;
+    backendInputFormat: function(e) {
+      return e === this.localization.midnight || e === this.localization.midnight.toLowerCase() ? "2400" : e.toLowerCase() === this.localization.t24hours.toLowerCase() ? "24hrs" : this.isValidFrontendTime(e) ? this.backendTimeFormat(e) : e;
     },
-    isEven: function(t) {
-      return t % 2 == 0;
+    isEven: function(e) {
+      return e % 2 == 0;
     },
-    isFirstInput: function(t) {
-      return t === 1;
+    isFirstInput: function(e) {
+      return e === 1;
     },
-    isLastInput: function(t, i) {
-      return t === i;
+    isLastInput: function(e, i) {
+      return e === i;
     },
-    isFirstRow: function(t) {
-      return t === 0;
+    isFirstRow: function(e) {
+      return e === 0;
     },
-    isLastRow: function(t, i) {
-      return t === i.length - 1;
+    isLastRow: function(e, i) {
+      return e === i.length - 1;
     },
-    isMiddleRow: function(t, i) {
-      return !this.isFirstRow(t) && !this.isLastRow(t, i);
+    isMiddleRow: function(e, i) {
+      return !this.isFirstRow(e) && !this.isLastRow(e, i);
     },
-    onlyOneRow: function(t) {
-      return t.length === 1;
+    onlyOneRow: function(e) {
+      return e.length === 1;
     },
-    getPrevious: function(t, i, e) {
-      if (e !== 1)
-        return this.isEven(e) ? t[i].open : t[i - 1].close;
+    getPrevious: function(e, i, t) {
+      if (t !== 1)
+        return this.isEven(t) ? e[i].open : e[i - 1].close;
     },
-    getNext: function(t, i, e, o) {
-      if (e !== o)
-        return this.isEven(e) ? t[i + 1].open : t[i].close;
+    getNext: function(e, i, t, o) {
+      if (t !== o)
+        return this.isEven(t) ? e[i + 1].open : e[i].close;
     }
   }
 }, B = {
@@ -134,67 +134,67 @@ const E = {
       return this.name + "[" + this.day + "][" + this.index + "][" + this.whichTime + "]";
     },
     filteredTimes: function() {
-      let t = this.getPrevious(this.hours, this.index, this.inputNum), i = this.getNext(
+      let e = this.getPrevious(this.hours, this.index, this.inputNum), i = this.getNext(
         this.hours,
         this.index,
         this.inputNum,
         this.totalInputs
-      ), e = this.times;
-      return !this.isFirstRow(this.index) && t === "" && (t = this.getPrevious(this.hours, this.index, this.inputNum - 1)), this.isFirstInput(this.inputNum) ? e = this.getFiltered("before", i, e) : this.isLastInput(this.inputNum, this.totalInputs) ? e = this.getFiltered("after", t, e) : (e = this.getFiltered("before", i, e), e = this.getFiltered("after", t, e)), e;
+      ), t = this.times;
+      return !this.isFirstRow(this.index) && e === "" && (e = this.getPrevious(this.hours, this.index, this.inputNum - 1)), this.isFirstInput(this.inputNum) ? t = this.getFiltered("before", i, t) : this.isLastInput(this.inputNum, this.totalInputs) ? t = this.getFiltered("after", e, t) : (t = this.getFiltered("before", i, t), t = this.getFiltered("after", e, t)), t;
     },
     showMidnightOption: function() {
       return this.isLastRow(this.index, this.hours) && this.whichTime === "close" && this.hours[this.index].close !== "24hrs";
     }
   },
   methods: {
-    formatTime: function(t, i) {
-      return g(t, "HHmm").format(i ? "HH:mm" : "hh:mm A");
+    formatTime: function(e, i) {
+      return g(e, "HHmm").format(i ? "HH:mm" : "hh:mm A");
     },
-    inputEventHandler: function(t) {
-      this.$emit("input-change", t.target.value);
+    inputEventHandler: function(e) {
+      this.$emit("input-change", e.target.value);
     },
-    generateTimes: function(t) {
-      let i = "0000", e = [];
+    generateTimes: function(e) {
+      let i = "0000", t = [];
       do
-        e.push(i), i = g(i, "HHmm").add(t, "minutes").format("HHmm");
+        t.push(i), i = g(i, "HHmm").add(e, "minutes").format("HHmm");
       while (i !== "0000");
-      return e;
+      return t;
     },
-    getFiltered: function(t, i, e) {
-      return this.isLastInput(this.inputNum, this.totalInputs) && this.hours[this.index].open === "" ? (e = e.filter((o) => o > i), e.shift(), e) : (i === "" || (t === "before" ? e = e.filter((o) => o < i) : t === "after" && (e = e.filter((o) => o > i))), e);
+    getFiltered: function(e, i, t) {
+      return this.isLastInput(this.inputNum, this.totalInputs) && this.hours[this.index].open === "" ? (t = t.filter((o) => o > i), t.shift(), t) : (i === "" || (e === "before" ? t = t.filter((o) => o < i) : e === "after" && (t = t.filter((o) => o > i))), t);
     }
   }
-}, C = (t, i) => {
-  const e = t.__vccOpts || t;
+}, C = (e, i) => {
+  const t = e.__vccOpts || e;
   for (const [o, l] of i)
-    e[o] = l;
-  return e;
+    t[o] = l;
+  return t;
 }, j = {
   name: "BusinessHoursSelect",
   mixins: [E, B]
 }, G = ["name"], Y = ["value", "selected"];
-function J(t, i, e, o, l, n) {
+function J(e, i, t, o, l, n) {
   return m((r(), a("select", {
-    name: t.optionName,
-    onChange: i[0] || (i[0] = (...s) => t.inputEventHandler && t.inputEventHandler(...s)),
-    "onUpdate:modelValue": i[1] || (i[1] = (s) => t.selected = s)
+    name: e.optionName,
+    onChange: i[0] || (i[0] = (...s) => e.inputEventHandler && e.inputEventHandler(...s)),
+    "onUpdate:modelValue": i[1] || (i[1] = (s) => e.selected = s)
   }, [
-    m(p("option", { value: "" }, f(t.defaultText), 513), [
-      [V, t.isFirstRow(t.index) && t.onlyOneRow(t.hours)]
+    m(p("option", { value: "" }, f(e.defaultText), 513), [
+      [V, e.isFirstRow(e.index) && e.onlyOneRow(e.hours)]
     ]),
-    m(p("option", { value: "24hrs" }, f(t.localization.t24hours), 513), [
-      [V, t.isFirstRow(t.index)]
+    m(p("option", { value: "24hrs" }, f(e.localization.t24hours), 513), [
+      [V, e.isFirstRow(e.index)]
     ]),
-    (r(!0), a(I, null, T(t.filteredTimes, (s) => (r(), a("option", {
+    (r(!0), a(I, null, T(e.filteredTimes, (s) => (r(), a("option", {
       key: s,
       value: s,
-      selected: s == t.selected
-    }, f(t.formatTime(s, t.hourFormat24)), 9, Y))), 128)),
-    m(p("option", { value: "2400" }, f(t.localization.midnight), 513), [
-      [V, t.showMidnightOption]
+      selected: s == e.selected
+    }, f(e.formatTime(s, e.hourFormat24)), 9, Y))), 128)),
+    m(p("option", { value: "2400" }, f(e.localization.midnight), 513), [
+      [V, e.showMidnightOption]
     ])
   ], 40, G)), [
-    [S, t.selected]
+    [S, e.selected]
   ]);
 }
 const W = /* @__PURE__ */ C(j, [["render", J]]), U = {
@@ -215,29 +215,29 @@ const W = /* @__PURE__ */ C(j, [["render", J]]), U = {
     }
   }
 }, K = ["list", "placeholder", "value"], Z = ["id"], Q = { key: 0 }, X = { key: 1 }, x = ["name", "value"];
-function $(t, i, e, o, l, n) {
+function $(e, i, t, o, l, n) {
   return r(), a("div", null, [
     p("input", {
-      class: P(["time-input", [e.anyError ? "has-error" : ""]]),
+      class: P(["time-input", [t.anyError ? "has-error" : ""]]),
       type: "text",
       list: n.datalistID,
-      placeholder: t.defaultText,
-      onChange: i[0] || (i[0] = (...s) => t.inputEventHandler && t.inputEventHandler(...s)),
+      placeholder: e.defaultText,
+      onChange: i[0] || (i[0] = (...s) => e.inputEventHandler && e.inputEventHandler(...s)),
       value: n.formattedTime
     }, null, 42, K),
     p("datalist", { id: n.datalistID }, [
-      t.isFirstRow(t.index) ? (r(), a("option", Q, f(t.localization.t24hours), 1)) : d("", !0),
-      (r(!0), a(I, null, T(t.filteredTimes, (s) => (r(), a("option", { key: s }, f(t.formatTime(s, t.hourFormat24)), 1))), 128)),
-      t.showMidnightOption ? (r(), a("option", X, f(t.localization.midnight), 1)) : d("", !0)
+      e.isFirstRow(e.index) ? (r(), a("option", Q, f(e.localization.t24hours), 1)) : d("", !0),
+      (r(!0), a(I, null, T(e.filteredTimes, (s) => (r(), a("option", { key: s }, f(e.formatTime(s, e.hourFormat24)), 1))), 128)),
+      e.showMidnightOption ? (r(), a("option", X, f(e.localization.midnight), 1)) : d("", !0)
     ], 8, Z),
     p("input", {
-      name: t.optionName,
+      name: e.optionName,
       type: "hidden",
-      value: t.selected
+      value: e.selected
     }, null, 8, x)
   ]);
 }
-const tt = /* @__PURE__ */ C(U, [["render", $], ["__scopeId", "data-v-d30967ab"]]), et = {
+const ee = /* @__PURE__ */ C(U, [["render", $], ["__scopeId", "data-v-d30967ab"]]), te = {
   data() {
     return {
       validations: [],
@@ -277,84 +277,84 @@ const tt = /* @__PURE__ */ C(U, [["render", $], ["__scopeId", "data-v-d30967ab"]
         close: this.defaultValidation()
       };
     },
-    isValidInput: function(t) {
-      return this.isValidBackendTime(t) || t === "2400" || t === "24hrs" || t === "";
+    isValidInput: function(e) {
+      return this.isValidBackendTime(e) || e === "2400" || e === "24hrs" || e === "";
     },
     resetValidations: function() {
-      let t = [];
-      this.hours.forEach((i, e) => {
-        t[e] = this.defaultValidations();
-      }), this.validations = t;
+      let e = [];
+      this.hours.forEach((i, t) => {
+        e[t] = this.defaultValidations();
+      }), this.validations = e;
     },
     runValidations: function() {
-      let t = 1;
-      this.resetValidations(), this.hours.forEach((i, e) => {
-        this.runValidation(i.open, e, t, "open"), t++, this.runValidation(i.close, e, t, "close"), t++;
+      let e = 1;
+      this.resetValidations(), this.hours.forEach((i, t) => {
+        this.runValidation(i.open, t, e, "open"), e++, this.runValidation(i.close, t, e, "close"), e++;
       }), this.updateAnyErrors();
     },
-    runValidation: function(t, i, e, o) {
-      this.isValidBackendTime(t) && (this.validations[i][o] = this.runInputValidation(
-        t,
-        i,
+    runValidation: function(e, i, t, o) {
+      this.isValidBackendTime(e) && (this.validations[i][o] = this.runInputValidation(
         e,
+        i,
+        t,
         this.totalInputs
       )), this.validations[i][o].invalidInput = !this.isValidInput(
-        t
-      ), this.updateAdjacentValidations(i, o, e);
+        e
+      ), this.updateAdjacentValidations(i, o, t);
     },
-    runInputValidation: function(t, i, e, o) {
-      const l = this.getPrevious(this.hours, i, e), n = this.getNext(this.hours, i, e, o);
+    runInputValidation: function(e, i, t, o) {
+      const l = this.getPrevious(this.hours, i, t), n = this.getNext(this.hours, i, t, o);
       let s = this.defaultValidation();
-      return s.midnightNotLast = t === "2400" && !this.isLastInput(e, o), l === void 0 ? s.greaterThanNext = t >= n && n !== "" : n === void 0 ? s.lessThanPrevious = t <= l && l !== "" : (s.lessThanPrevious = t <= l && l !== "", s.greaterThanNext = t >= n && n !== ""), s;
+      return s.midnightNotLast = e === "2400" && !this.isLastInput(t, o), l === void 0 ? s.greaterThanNext = e >= n && n !== "" : n === void 0 ? s.lessThanPrevious = e <= l && l !== "" : (s.lessThanPrevious = e <= l && l !== "", s.greaterThanNext = e >= n && n !== ""), s;
     },
-    updateAdjacentValidations: function(t, i, e) {
-      const o = t - 1, l = t + 1, n = this.validations[t][i];
-      let s = this.getPrevious(this.validations, t, e), c = this.getNext(
+    updateAdjacentValidations: function(e, i, t) {
+      const o = e - 1, l = e + 1, n = this.validations[e][i];
+      let s = this.getPrevious(this.validations, e, t), c = this.getNext(
         this.validations,
-        t,
         e,
+        t,
         this.totalInputs
       );
-      s !== void 0 && (n.lessThanPrevious ? s.greaterThanNext = !0 : n.lessThanPrevious || (s.greaterThanNext = !1)), c !== void 0 && (n.greaterThanNext ? c.lessThanPrevious = !0 : n.greaterThanNext || (c.lessThanPrevious = !1)), !this.isFirstInput(e) && i === "open" ? this.validations[o].close = s : i === "close" && (this.validations[t].open = s), !this.isLastInput(e, this.totalInputs) && i === "close" ? this.validations[l].open = c : i === "open" && (this.validations[t].close = c);
+      s !== void 0 && (n.lessThanPrevious ? s.greaterThanNext = !0 : n.lessThanPrevious || (s.greaterThanNext = !1)), c !== void 0 && (n.greaterThanNext ? c.lessThanPrevious = !0 : n.greaterThanNext || (c.lessThanPrevious = !1)), !this.isFirstInput(t) && i === "open" ? this.validations[o].close = s : i === "close" && (this.validations[e].open = s), !this.isLastInput(t, this.totalInputs) && i === "close" ? this.validations[l].open = c : i === "open" && (this.validations[e].close = c);
     },
     updateAnyErrors: function() {
       this.validations.forEach(
-        (t, i) => this.validations[i].anyErrors = this.anyErrors(t)
+        (e, i) => this.validations[i].anyErrors = this.anyErrors(e)
       );
     },
-    anyErrors: function(t) {
-      return !!(this.anyError(t.open) || this.anyError(t.close));
+    anyErrors: function(e) {
+      return !!(this.anyError(e.open) || this.anyError(e.close));
     },
-    anyError: function(t) {
-      return Object.keys(t).some((i) => t[i] === !0);
+    anyError: function(e) {
+      return Object.keys(e).some((i) => e[i] === !0);
     },
-    activeErrors: function(t) {
-      const i = this.validations[t];
-      let e = [];
+    activeErrors: function(e) {
+      const i = this.validations[e];
+      let t = [];
       return Object.keys(i).forEach((o) => {
         if (typeof i[o] == "object") {
           let l = i[o];
           Object.keys(l).filter((n) => l[n] === !0).forEach((n) => {
-            e.push({
+            t.push({
               whichTime: o,
               error: n
             });
           });
         }
-      }), e;
+      }), t;
     },
-    errorMessage: function(t, i) {
-      return this.errors[t][i];
+    errorMessage: function(e, i) {
+      return this.errors[e][i];
     }
   }
-}, it = {
+}, ie = {
   name: "BusinessHoursDay",
   components: {
     BusinessHoursSelect: W,
-    BusinessHoursDatalist: tt,
+    BusinessHoursDatalist: ee,
     Toggle: A
   },
-  mixins: [E, et],
+  mixins: [E, te],
   props: {
     day: {
       type: String,
@@ -398,37 +398,37 @@ const tt = /* @__PURE__ */ C(U, [["render", $], ["__scopeId", "data-v-d30967ab"]
       return this.hours[0].isOpen;
     },
     anyOpen: function() {
-      return this.hours.some((t) => t.isOpen === !0);
+      return this.hours.some((e) => e.isOpen === !0);
     },
     uniqId: function() {
       return k();
     }
   },
   directives: {
-    visible: function(t, i) {
-      t.style.visibility = i.value ? "visible" : "hidden";
+    visible: function(e, i) {
+      e.style.visibility = i.value ? "visible" : "hidden";
     }
   },
   methods: {
-    onChangeEventHandler: function(t, i, e) {
-      if (e = this.backendInputFormat(e), this.hours[0].id = this.hours[0].id || k(), e == "24hrs") {
-        this.hours.splice(1), this.hours[0].open = this.hours[0].close = e, this.runValidations(), this.updateHours();
+    onChangeEventHandler: function(e, i, t) {
+      if (t = this.backendInputFormat(t), this.hours[0].id = this.hours[0].id || k(), t == "24hrs") {
+        this.hours.splice(1), this.hours[0].open = this.hours[0].close = t, this.runValidations(), this.updateHours();
         return;
       }
-      if ((this.hours[i].open == "24hrs" || this.hours[i].close == "24hrs") && e == "") {
-        this.hours[i].open = this.hours[i].close = e, this.runValidations(), this.updateHours();
+      if ((this.hours[i].open == "24hrs" || this.hours[i].close == "24hrs") && t == "") {
+        this.hours[i].open = this.hours[i].close = t, this.runValidations(), this.updateHours();
         return;
       }
-      if (!this.onlyOneRow(this.hours) && e === "" && (t === "open" && this.hours[i].close === "" || t === "close" && this.hours[i].open === "")) {
+      if (!this.onlyOneRow(this.hours) && t === "" && (e === "open" && this.hours[i].close === "" || e === "close" && this.hours[i].open === "")) {
         this.removeRow(i), this.runValidations(), this.updateHours();
         return;
       }
-      this.hours[i][t] = e, this.runValidations(), this.updateHours();
+      this.hours[i][e] = t, this.runValidations(), this.updateHours();
     },
-    inputNum: function(t, i) {
-      if (t === "open")
+    inputNum: function(e, i) {
+      if (e === "open")
         return i * 2 + 1;
-      if (t === "close")
+      if (e === "close")
         return i * 2 + 2;
     },
     toggleOpen: function() {
@@ -445,109 +445,109 @@ const tt = /* @__PURE__ */ C(U, [["render", $], ["__scopeId", "data-v-d30967ab"]
         isOpen: !0
       }), this.runValidations(), this.updateHours();
     },
-    removeRow: function(t) {
-      this.hours.splice(t, 1), this.runValidations(), this.updateHours();
+    removeRow: function(e) {
+      this.hours.splice(e, 1), this.runValidations(), this.updateHours();
     },
-    showDay: function(t) {
-      return !(t > 0);
+    showDay: function(e) {
+      return !(e > 0);
     },
     showRemoveButton: function() {
       return this.hours.length > 1;
     },
-    showAddButton: function(t) {
-      return this.hours.length === t + 1 && this.hours[t].open !== "" && this.hours[t].close !== "" && this.hours[t].open !== "24hrs" && this.hours[t].close !== "24hrs" && !(this.type === "select" && this.timeIncrement === 15 && this.hours[t].close === "2345") && !(this.type === "select" && this.timeIncrement === 30 && this.hours[t].close === "2330") && !(this.type === "select" && this.timeIncrement === 60 && this.hours[t].close === "2300") && this.hours[t].close !== "2400" && this.validations[t].anyErrors === !1;
+    showAddButton: function(e) {
+      return this.hours.length === e + 1 && this.hours[e].open !== "" && this.hours[e].close !== "" && this.hours[e].open !== "24hrs" && this.hours[e].close !== "24hrs" && !(this.type === "select" && this.timeIncrement === 15 && this.hours[e].close === "2345") && !(this.type === "select" && this.timeIncrement === 30 && this.hours[e].close === "2330") && !(this.type === "select" && this.timeIncrement === 60 && this.hours[e].close === "2300") && this.hours[e].close !== "2400" && this.validations[e].anyErrors === !1;
     },
     updateHours: function() {
-      const t = { [this.day]: this.hours };
-      this.$emit("hours-change", t);
+      const e = { [this.day]: this.hours };
+      this.$emit("hours-change", e);
     }
   }
-}, nt = {
+}, ne = {
   is: "transition-group",
   name: "fade"
-}, st = {
+}, se = {
   class: "flex-table row",
   role: "rowgroup"
-}, rt = {
+}, re = {
   class: "flex-row day",
   role: "cell"
-}, ot = { key: 0 }, at = {
+}, oe = { key: 0 }, ae = {
   class: "flex-row switch",
   role: "cell"
-}, ut = {
+}, ue = {
   class: "flex-row hours open",
   role: "cell"
-}, lt = {
+}, le = {
   class: "flex-row dash",
   role: "cell"
-}, ht = {
+}, he = {
   class: "flex-row hours close",
   role: "cell"
-}, dt = {
+}, de = {
   class: "flex-row remove",
   role: "cell"
-}, ct = ["onClick"], mt = /* @__PURE__ */ L('<svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.2" data-v-c0607a0c><g id="SVGRepo_bgCarrier" stroke-width="0" data-v-c0607a0c></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" data-v-c0607a0c></g><g id="SVGRepo_iconCarrier" data-v-c0607a0c><path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" fill="#0F0F0F" data-darkreader-inline-fill="" style="--darkreader-inline-fill:#0b0c0d;" data-v-c0607a0c></path></g></svg>', 1), ft = [
-  mt
-], pt = {
+}, ce = ["onClick"], me = /* @__PURE__ */ L('<svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#3d4852" stroke-width="1.2" data-v-ec1a3203><g id="SVGRepo_bgCarrier" stroke-width="0" data-v-ec1a3203></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" data-v-ec1a3203></g><g id="SVGRepo_iconCarrier" data-v-ec1a3203><path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" fill="#3d4852" data-darkreader-inline-fill="" style="--darkreader-inline-fill:#3d4852;" data-v-ec1a3203></path></g></svg>', 1), fe = [
+  me
+], pe = {
   class: "flex-row add",
   role: "cell"
-}, yt = /* @__PURE__ */ L('<svg width="28px" height="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-c0607a0c><g id="SVGRepo_bgCarrier" stroke-width="0" data-v-c0607a0c></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" data-v-c0607a0c></g><g id="SVGRepo_iconCarrier" data-v-c0607a0c><path d="M6 12H18M12 6V18" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-v-c0607a0c></path></g></svg>', 1), gt = [
-  yt
-], vt = {
+}, ye = /* @__PURE__ */ L('<svg width="28px" height="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-ec1a3203><g id="SVGRepo_bgCarrier" stroke-width="0" data-v-ec1a3203></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" data-v-ec1a3203></g><g id="SVGRepo_iconCarrier" data-v-ec1a3203><path d="M6 12H18M12 6V18" stroke="#3d4852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-v-ec1a3203></path></g></svg>', 1), ge = [
+  ye
+], ve = {
   key: 0,
   class: "time-errors"
 };
-function wt(t, i, e, o, l, n) {
+function we(e, i, t, o, l, n) {
   const s = H("Toggle"), c = H("BusinessHoursSelect"), v = H("BusinessHoursDatalist"), w = R("visible");
-  return r(), a("div", nt, [
-    (r(!0), a(I, null, T(e.hours, ({ open: z, close: F, id: O, isOpen: Vt }, u) => (r(), a("div", {
-      key: O || n.uniqId
+  return r(), a("div", ne, [
+    (r(!0), a(I, null, T(t.hours, ({ open: z, close: O, id: F, isOpen: Ve }, u) => (r(), a("div", {
+      key: F || n.uniqId
     }, [
-      p("div", st, [
-        p("div", rt, [
-          n.showDay(u) ? (r(), a("div", ot, f(e.localization.days[e.day]), 1)) : d("", !0)
+      p("div", se, [
+        p("div", re, [
+          n.showDay(u) ? (r(), a("div", oe, f(t.localization.days[t.day]), 1)) : d("", !0)
         ]),
-        p("div", at, [
+        p("div", ae, [
           n.showDay(u) ? (r(), y(s, {
             key: 0,
-            id: "toggle-" + O || n.uniqId,
+            id: "toggle-" + F || n.uniqId,
             modelValue: n.anyOpen,
             "onUpdate:modelValue": i[0] || (i[0] = (h) => n.anyOpen = h),
             onChange: i[1] || (i[1] = (h) => {
-              n.toggleOpen(), n.resetHours(), t.runValidations();
+              n.toggleOpen(), n.resetHours(), e.runValidations();
             })
           }, null, 8, ["id", "modelValue"])) : d("", !0)
         ]),
         b(_, { name: "fade" }, {
           default: N(() => [
-            m((r(), a("div", ut, [
-              e.type === "select" ? (r(), y(c, {
+            m((r(), a("div", ue, [
+              t.type === "select" ? (r(), y(c, {
                 key: 0,
-                name: e.name,
+                name: t.name,
                 "input-num": n.inputNum("open", u),
                 "total-inputs": n.totalInputs,
-                day: e.day,
-                hours: e.hours,
-                "time-increment": e.timeIncrement,
+                day: t.day,
+                hours: t.hours,
+                "time-increment": t.timeIncrement,
                 index: u,
                 "selected-time": z,
-                localization: e.localization,
-                "hour-format24": e.hourFormat24,
+                localization: t.localization,
+                "hour-format24": t.hourFormat24,
                 onInputChange: (h) => n.onChangeEventHandler("open", u, h)
               }, null, 8, ["name", "input-num", "total-inputs", "day", "hours", "time-increment", "index", "selected-time", "localization", "hour-format24", "onInputChange"])) : d("", !0),
-              e.type === "datalist" ? (r(), y(v, {
+              t.type === "datalist" ? (r(), y(v, {
                 key: 1,
-                name: e.name,
+                name: t.name,
                 "input-num": n.inputNum("open", u),
                 "total-inputs": n.totalInputs,
-                day: e.day,
-                hours: e.hours,
-                "time-increment": e.timeIncrement,
+                day: t.day,
+                hours: t.hours,
+                "time-increment": t.timeIncrement,
                 index: u,
                 "selected-time": z,
-                "any-error": t.anyError(t.validations[u].open),
-                localization: e.localization,
-                "hour-format24": e.hourFormat24,
+                "any-error": e.anyError(e.validations[u].open),
+                localization: t.localization,
+                "hour-format24": t.hourFormat24,
                 onInputChange: (h) => n.onChangeEventHandler("open", u, h)
               }, null, 8, ["name", "input-num", "total-inputs", "day", "hours", "time-increment", "index", "selected-time", "any-error", "localization", "hour-format24", "onInputChange"])) : d("", !0)
             ])), [
@@ -558,7 +558,7 @@ function wt(t, i, e, o, l, n) {
         }, 1024),
         b(_, { name: "fade" }, {
           default: N(() => [
-            m((r(), a("div", lt, [
+            m((r(), a("div", le, [
               M("-")
             ])), [
               [w, n.isOpenToday]
@@ -568,35 +568,35 @@ function wt(t, i, e, o, l, n) {
         }),
         b(_, { name: "fade" }, {
           default: N(() => [
-            m((r(), a("div", ht, [
-              e.type === "select" ? (r(), y(c, {
+            m((r(), a("div", he, [
+              t.type === "select" ? (r(), y(c, {
                 key: 0,
-                name: e.name,
+                name: t.name,
                 "input-num": n.inputNum("close", u),
                 "total-inputs": n.totalInputs,
-                day: e.day,
-                hours: e.hours,
-                "time-increment": e.timeIncrement,
+                day: t.day,
+                hours: t.hours,
+                "time-increment": t.timeIncrement,
                 index: u,
-                "selected-time": F,
-                localization: e.localization,
-                "hour-format24": e.hourFormat24,
+                "selected-time": O,
+                localization: t.localization,
+                "hour-format24": t.hourFormat24,
                 onInputChange: (h) => n.onChangeEventHandler("close", u, h)
               }, null, 8, ["name", "input-num", "total-inputs", "day", "hours", "time-increment", "index", "selected-time", "localization", "hour-format24", "onInputChange"])) : d("", !0),
-              e.type === "datalist" ? (r(), y(v, {
+              t.type === "datalist" ? (r(), y(v, {
                 key: 1,
-                name: e.name,
+                name: t.name,
                 "input-num": n.inputNum("close", u),
                 "total-inputs": n.totalInputs,
-                day: e.day,
-                hours: e.hours,
-                "time-increment": e.timeIncrement,
+                day: t.day,
+                hours: t.hours,
+                "time-increment": t.timeIncrement,
                 index: u,
-                "any-error": t.anyError(t.validations[u].close),
-                "updated-validations": t.validations[u].close,
-                "selected-time": F,
-                "hour-format24": e.hourFormat24,
-                localization: e.localization,
+                "any-error": e.anyError(e.validations[u].close),
+                "updated-validations": e.validations[u].close,
+                "selected-time": O,
+                "hour-format24": t.hourFormat24,
+                localization: t.localization,
                 onInputChange: (h) => n.onChangeEventHandler("close", u, h)
               }, null, 8, ["name", "input-num", "total-inputs", "day", "hours", "time-increment", "index", "any-error", "updated-validations", "selected-time", "hour-format24", "localization", "onInputChange"])) : d("", !0)
             ])), [
@@ -605,40 +605,40 @@ function wt(t, i, e, o, l, n) {
           ]),
           _: 2
         }, 1024),
-        m((r(), a("div", dt, [
+        m((r(), a("div", de, [
           n.showRemoveButton() ? (r(), a("button", {
             key: 0,
             type: "button",
             class: "font-awesome-button",
             onClick: (h) => n.removeRow(u)
-          }, ft, 8, ct)) : d("", !0)
+          }, fe, 8, ce)) : d("", !0)
         ])), [
           [w, n.isOpenToday]
         ]),
-        m((r(), a("div", pt, [
+        m((r(), a("div", pe, [
           n.showAddButton(u) ? (r(), a("button", {
             key: 0,
             type: "button",
-            style: q({ color: e.color }),
+            style: q({ color: t.color }),
             class: "add-hours",
             onClick: i[2] || (i[2] = (h) => n.addRow())
-          }, gt, 4)) : d("", !0)
+          }, ge, 4)) : d("", !0)
         ])), [
           [w, n.isOpenToday]
         ])
       ]),
-      t.validations[u].anyErrors ? (r(), a("ul", vt, [
-        (r(!0), a(I, null, T(t.activeErrors(u), ({ whichTime: h, error: D }) => (r(), a("li", {
+      e.validations[u].anyErrors ? (r(), a("ul", ve, [
+        (r(!0), a(I, null, T(e.activeErrors(u), ({ whichTime: h, error: D }) => (r(), a("li", {
           key: h + "." + D
-        }, f(t.errorMessage(h, D)), 1))), 128))
+        }, f(e.errorMessage(h, D)), 1))), 128))
       ])) : d("", !0)
     ]))), 128))
   ]);
 }
-const It = /* @__PURE__ */ C(it, [["render", wt], ["__scopeId", "data-v-c0607a0c"]]), Tt = {
+const Ie = /* @__PURE__ */ C(ie, [["render", we], ["__scopeId", "data-v-ec1a3203"]]), Te = {
   name: "BusinessHours",
   components: {
-    BusinessHoursDay: It
+    BusinessHoursDay: Ie
   },
   props: {
     days: {
@@ -652,22 +652,22 @@ const It = /* @__PURE__ */ C(it, [["render", wt], ["__scopeId", "data-v-c0607a0c
     type: {
       type: String,
       default: "datalist",
-      validator: function(t) {
-        return ["datalist", "select"].indexOf(t) !== -1;
+      validator: function(e) {
+        return ["datalist", "select"].indexOf(e) !== -1;
       }
     },
     timeIncrement: {
       type: Number,
       default: 30,
-      validator: function(t) {
-        return [15, 30, 60].indexOf(t) !== -1;
+      validator: function(e) {
+        return [15, 30, 60].indexOf(e) !== -1;
       }
     },
     color: {
       type: String,
       default: "#2779bd",
-      validator: function(t) {
-        return t.charAt(0) === "#";
+      validator: function(e) {
+        return e.charAt(0) === "#";
       }
     },
     localization: {
@@ -730,30 +730,30 @@ const It = /* @__PURE__ */ C(it, [["render", wt], ["__scopeId", "data-v-c0607a0c
     }
   },
   methods: {
-    hoursChange: function(t) {
-      this.$emit("updated-hours", t);
+    hoursChange: function(e) {
+      this.$emit("updated-hours", e);
     }
   }
-}, Ht = { class: "business-hours-container" };
-function Ct(t, i, e, o, l, n) {
+}, He = { class: "business-hours-container" };
+function Ce(e, i, t, o, l, n) {
   const s = H("business-hours-day");
-  return r(), a("div", Ht, [
-    (r(!0), a(I, null, T(e.days, (c, v) => (r(), y(s, {
+  return r(), a("div", He, [
+    (r(!0), a(I, null, T(t.days, (c, v) => (r(), y(s, {
       onHoursChange: n.hoursChange,
       key: v,
       day: v,
       hours: c,
-      name: e.name,
-      "time-increment": e.timeIncrement,
-      type: e.type,
-      color: e.color,
-      localization: e.localization,
-      "switch-width": e.switchWidth,
-      "hour-format24": e.hourFormat24
+      name: t.name,
+      "time-increment": t.timeIncrement,
+      type: t.type,
+      color: t.color,
+      localization: t.localization,
+      "switch-width": t.switchWidth,
+      "hour-format24": t.hourFormat24
     }, null, 8, ["onHoursChange", "day", "hours", "name", "time-increment", "type", "color", "localization", "switch-width", "hour-format24"]))), 128))
   ]);
 }
-const Et = /* @__PURE__ */ C(Tt, [["render", Ct], ["__scopeId", "data-v-c1580f11"]]);
+const Ee = /* @__PURE__ */ C(Te, [["render", Ce], ["__scopeId", "data-v-615046f5"]]);
 export {
-  Et as default
+  Ee as default
 };
